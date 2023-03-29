@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>GPT-3 Query</title>
+  </head>
+  <body>
+    <div>
+      <textarea id="query"></textarea>
+      <button id="submit">Submit</button>
+    </div>
+    <div>
+      <textarea id="response" readonly></textarea>
+    </div>
+
+    <!-- Include axios library -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <!-- Add the JavaScript code -->
+    <script>
+      const queryField = document.getElementById("query");
+      const responseField = document.getElementById("response");
+      const submitButton = document.getElementById("submit");
+
+      submitButton.addEventListener("click", function() {
+        const query = queryField.value;
+        const apiKey = "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";
+
+
+
+        axios.post("https://api.openai.com/v1/completions", {
+          prompt: query ,
+	 model: 'text-davinci-003',
+          max_tokens: 1000,
+         
+          temperature: 0.5,
+        }, {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${apiKey}`
+          }
+        })
+        .then(function (response) {
+          const result = response.data.choices[0].text;
+          responseField.value = result;
+        })
+        .catch(function (error) {
+          console.error(error);
+          responseField.value = "An error occurred. Please try again later.";
+	  responseField.value =  error + apiKey;
+        });
+      });
+    </script>
+  </body>
+</html>
